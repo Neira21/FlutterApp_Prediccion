@@ -9,6 +9,8 @@ class InputText extends StatelessWidget {
   final TextEditingController controller;
   final int width;
   final bool enabled;
+  final FilteringTextInputFormatter inputFormatters;
+  final int maxLength;
 
   const InputText({
     Key? key,
@@ -17,6 +19,8 @@ class InputText extends StatelessWidget {
     required this.controller,
     required this.width,
     required this.enabled,
+    required this.inputFormatters,
+    this.maxLength = 2,    
   }) : super(key: key);
 
   @override
@@ -57,9 +61,9 @@ class InputText extends StatelessWidget {
                 fillColor: enabled ? Colors.white : Colors.grey[300],
               ),
               inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
+                inputFormatters,
               ],
-              maxLength: 1,
+              maxLength: maxLength,
             ),
           ),
           const SizedBox(width: 10),

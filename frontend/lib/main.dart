@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/input_text.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'functions.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +16,10 @@ class MyApp extends StatefulWidget {
 
   @override
   _MyAppState createState() => _MyAppState();
+
+  final FilteringTextInputFormatter filtroNota = FilteringTextInputFormatter.allow(RegExp(r'^(?:A|B|C|AD)$'));
+  final FilteringTextInputFormatter filtroGender = FilteringTextInputFormatter.allow(RegExp(r'^(?:F|M)$'));
+  final FilteringTextInputFormatter filtroSection = FilteringTextInputFormatter.allow(RegExp(r'^(?:A|B)$'));
 
   final List<String> temaList = [
     'Tema 1',
@@ -104,14 +111,6 @@ class _MyAppState extends State<MyApp> {
   List<bool> enabledList = [];
   bool genderEnabled = false;
   bool sectionEnabled = false;
-  
-  
-  String selectedValue ="";
-  List<String> dropdownItems = [
-    'Opción 1',
-    'Opción 2',
-    'Opción 3',
-  ];
 
 
   @override
@@ -119,6 +118,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     enabledList = List.generate(widget.temaList.length, (index) => false);
   }
+
+
 
   void fetchPrediction() async {
     if (_selectedModel == -1) {
@@ -157,15 +158,17 @@ class _MyAppState extends State<MyApp> {
           return;
         }
         url += 'load_model1';
-        params += 'nota1=${widget.controllerList[0].text}';
-        params += '&nota2=${widget.controllerList[1].text}';
-        params += '&nota3=${widget.controllerList[2].text}';
-        params += '&nota4=${widget.controllerList[3].text}';
-        params += '&nota5=${widget.controllerList[4].text}';
-        params += '&nota6=${widget.controllerList[5].text}';
-        params += '&genero=${widget.genderController.text}';
-        params += '&seccion=${widget.sectionController.text}';
-        headerStr = 'Nota final ';
+        params += 'nota1=${stringConvertToNumeber(widget.controllerList[0].text)}';
+        params += '&nota2=${stringConvertToNumeber(widget.controllerList[1].text)}';
+        params += '&nota3=${stringConvertToNumeber(widget.controllerList[2].text)}';
+        params += '&nota4=${stringConvertToNumeber(widget.controllerList[3].text)}';
+        params += '&nota5=${stringConvertToNumeber(widget.controllerList[4].text)}';
+        params += '&nota6=${stringConvertToNumeber(widget.controllerList[5].text)}';
+
+
+        params += '&genero=${stringConvertToNumeberGender(widget.genderController.text)}';
+        params += '&seccion=${stringConvertToNumeberSeccion(widget.sectionController.text)}';
+        headerStr = 'Nota final => ';
         break;
 
       // TODO: para los demás modelos
@@ -191,13 +194,14 @@ class _MyAppState extends State<MyApp> {
           return;
         }
         url += 'load_Tema1_2_Prom1';
-        params += 'nota1=${widget.controllerList[0].text}';
-        params += '&nota2=${widget.controllerList[1].text}';
-        params += '&genero=${widget.genderController.text}';
-        params += '&seccion=${widget.sectionController.text}';
-        headerStr = 'Promedio1 ';
+        params += 'nota1=${stringConvertToNumeber(widget.controllerList[0].text)}';
+        params += '&nota2=${stringConvertToNumeber(widget.controllerList[1].text)}';
+        params += '&genero=${stringConvertToNumeberGender(widget.genderController.text)}';
+        params += '&seccion=${stringConvertToNumeberSeccion(widget.sectionController.text)}';
+        headerStr = 'Promedio 1 => ';
         break;
       case 2:
+
       case 3:
       case 4:
       case 5:
@@ -216,7 +220,7 @@ class _MyAppState extends State<MyApp> {
       var data = jsonDecode(response.body);
       print(data);
       setState(() {
-        _response = "$headerStr${data['nota']} con una precisión de ${data['prediccion']}";
+        _response = "$headerStr${numberConvertToString(data['nota'])} con una precisión de ${data['prediccion']}";
       });
     } else {
       setState(() {
@@ -294,152 +298,198 @@ class _MyAppState extends State<MyApp> {
             'assets/images/logo.png',
             width: 40,
           ),
-        ),
-        body: Center(
-          
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
 
-            const Text(
-              'Seleccione el modelo a utilizar',
-              style: TextStyle(fontSize: 24),
-            ),                        
-            
-            DataTable(
-            columns: const [
-              DataColumn(label: Text('Modelo')),
-              DataColumn(label: Text('Descirpción')),
-              DataColumn(label: Text('Porcentaje')),
-            ],
-            rows: const [
-              DataRow(cells: [
-                DataCell(Text('Modelo 1')),
-                DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre')),
-                DataCell(Text('60% de precisión')),
-              ]),
-              DataRow(cells: [
-                DataCell(Text('Modelo 2')),
-                DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre y 2do Bimestre')),
-                DataCell(Text('67% de precisión')),
-              ]),
-              DataRow(cells: [
-                DataCell(Text('Modelo 3')),
-                DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre, 2do Bimestre y 3er Bimestre')),
-                DataCell(Text('61% de precisión')),
-              ]),
-            ],
-          ),
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  InputText(
-                    width: width,
-                    label: widget.genderStr,
-                    controller: widget.genderController,
-                    enabled: genderEnabled,
-                  ),
-
-                  InputText(
-                    width: width,
-                    label: widget.sectionStr,
-                    controller: widget.sectionController,
-                    enabled: sectionEnabled,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  for (int i = 0; i < 10; i++)
-                    InputText(
-                      width: width,
-                      label: widget.temaList[i],
-                      controller: widget.controllerList[i],
-                      enabled: enabledList[i],
-                    ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  for (int i = 10; i < 20; i++)
-                    InputText(
-                      width: width,
-                      label: widget.temaList[i],
-                      controller: widget.controllerList[i],
-                      enabled: enabledList[i],
-                    ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  for (int i = 20; i < 29; i++)
-                    InputText(
-                      width: width,
-                      label: widget.temaList[i],
-                      controller: widget.controllerList[i],
-                      enabled: enabledList[i],
-                    ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (int i = 0; i < widget.models.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedModel = i;
-                              setModel(i);
-                            });
-                          },
-                          child: Container(
-                            width: 120,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: _selectedModel == i ? Colors.blue : Colors.grey,
-                              borderRadius: BorderRadius.circular(8),
+          actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            // Contenido del modal
+                            child: Column(
+                              children: [
+                                Text('Contenido del modal'),
+                                // Otros widgets dentro del modal
+                              ],
                             ),
-                            child: Center(
-                              child: Text(
-                                widget.models[i],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                          );
+                        },
+                      );
+                  },
+                  child: Icon(
+                    Icons.search,
+                    size: 26.0,
+                  ),
+                )
+              ),
+            ],
+        ),
+        body: 
+        
+          SingleChildScrollView(
+            child: Center(
+            
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+          
+              const Text(
+                'Seleccione el modelo a utilizar',
+                style: TextStyle(fontSize: 24),
+              ),
+              
+              SizedBox(
+                height: 175,
+                child: SingleChildScrollView (
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('Modelo')),
+                      DataColumn(label: Text('Descirpción')),
+                      DataColumn(label: Text('Porcentaje')),
+                    ],
+                    rows: const [
+                      DataRow(cells: [
+                        DataCell(Text('Modelo 1')),
+                        DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre')),
+                        DataCell(Text('60% de precisión')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('Modelo 2')),
+                        DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre y 2do Bimestre')),
+                        DataCell(Text('67% de precisión')),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('Modelo 3')),
+                        DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre, 2do Bimestre y 3er Bimestre')),
+                        DataCell(Text('61% de precisión')),
+                      ]),
+                      ],
+                    ),
+                ),
+              ),
+          
+                const SizedBox(height:25),
+          
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InputText(
+                      width: width,
+                      label: widget.genderStr,
+                      controller: widget.genderController,
+                      enabled: genderEnabled,
+                      inputFormatters: widget.filtroGender,
+                      maxLength: 1,
+                      
+                    ),
+          
+                    InputText(
+                      width: width,
+                      label: widget.sectionStr,
+                      controller: widget.sectionController,
+                      enabled: sectionEnabled,
+                      inputFormatters: widget.filtroSection,
+                      maxLength: 1,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    for (int i = 0; i < 10; i++)
+                      InputText(
+                        width: width,
+                        label: widget.temaList[i],
+                        controller: widget.controllerList[i],
+                        enabled: enabledList[i],
+                        inputFormatters: widget.filtroNota,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    for (int i = 10; i < 20; i++)
+                      InputText(
+                        width: width,
+                        label: widget.temaList[i],
+                        controller: widget.controllerList[i],
+                        enabled: enabledList[i],
+                        inputFormatters: widget.filtroNota,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    for (int i = 20; i < 29; i++)
+                      InputText(
+                        width: width,
+                        label: widget.temaList[i],
+                        controller: widget.controllerList[i],
+                        enabled: enabledList[i],
+                        inputFormatters: widget.filtroNota,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (int i = 0; i < widget.models.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedModel = i;
+                                setModel(i);
+                              });
+                            },
+                            child: Container(
+                              width: 120,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: _selectedModel == i ? Colors.blue : Colors.grey,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  widget.models[i],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: fetchPrediction,
-                  child: const Text('Obtener Predicción'),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                _response,
-                style: const TextStyle(fontSize: 18),
-              ),
-            ],
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: fetchPrediction,
+                    child: const Text('Obtener Predicción'),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  _response,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+                  ),
           ),
-        ),
       ),
     );
   }

@@ -30,7 +30,8 @@ def load_model1():
     notaFinal = model.predict([[nota1, nota2, nota3, nota4, nota5, nota6, genero, seccion]])
     print(notaFinal)
     result = {
-        'nota': int(notaFinal[0])
+        'nota': int(notaFinal[0]),
+        'prediccion': data["model1"]['prediccion']
     }
     return jsonify(result)
 

@@ -119,8 +119,6 @@ class _MyAppState extends State<MyApp> {
     enabledList = List.generate(widget.temaList.length, (index) => false);
   }
 
-
-
   void fetchPrediction() async {
     if (_selectedModel == -1) {
       setState(() {
@@ -201,7 +199,55 @@ class _MyAppState extends State<MyApp> {
         headerStr = 'Promedio 1 => ';
         break;
       case 2:
-
+        if (widget.genderController.text.isEmpty) {
+          setState(() {
+            _response = 'Por favor ingrese el género';
+          });
+          return;
+        }
+        if (widget.sectionController.text.isEmpty) {
+          setState(() {
+            _response = 'Por favor ingrese la sección';
+          });
+          return;
+        }
+        if (widget.controllerList[0].text.isEmpty ||
+            widget.controllerList[1].text.isEmpty ||
+            widget.controllerList[2].text.isEmpty ||
+            widget.controllerList[3].text.isEmpty ||
+            widget.controllerList[4].text.isEmpty ||
+            widget.controllerList[5].text.isEmpty ||
+            widget.controllerList[6].text.isEmpty ||
+            widget.controllerList[7].text.isEmpty ||
+            widget.controllerList[8].text.isEmpty ||
+            widget.controllerList[9].text.isEmpty ||
+            widget.controllerList[10].text.isEmpty ||
+            widget.controllerList[11].text.isEmpty ||
+            widget.controllerList[12].text.isEmpty 
+            ) {
+          setState(() {
+            _response = 'Por favor ingrese todas las notas requeridas';
+          });
+          return;
+        }
+        url += 'load_model2';
+        params += 'nota1=${stringConvertToNumeber(widget.controllerList[0].text)}';
+        params += '&nota2=${stringConvertToNumeber(widget.controllerList[1].text)}';
+        params += '&nota3=${stringConvertToNumeber(widget.controllerList[2].text)}';
+        params += '&nota4=${stringConvertToNumeber(widget.controllerList[3].text)}';
+        params += '&nota5=${stringConvertToNumeber(widget.controllerList[4].text)}';
+        params += '&nota6=${stringConvertToNumeber(widget.controllerList[5].text)}';
+        params += '&nota7=${stringConvertToNumeber(widget.controllerList[6].text)}';
+        params += '&nota8=${stringConvertToNumeber(widget.controllerList[7].text)}';
+        params += '&nota9=${stringConvertToNumeber(widget.controllerList[8].text)}';
+        params += '&nota10=${stringConvertToNumeber(widget.controllerList[9].text)}';
+        params += '&nota11=${stringConvertToNumeber(widget.controllerList[10].text)}';
+        params += '&nota12=${stringConvertToNumeber(widget.controllerList[11].text)}';
+        params += '&nota13=${stringConvertToNumeber(widget.controllerList[12].text)}';
+        params += '&genero=${stringConvertToNumeberGender(widget.genderController.text)}';
+        params += '&seccion=${stringConvertToNumeberSeccion(widget.sectionController.text)}';
+        headerStr = 'Nota Final 1 => ';
+        break;
       case 3:
       case 4:
       case 5:
@@ -256,12 +302,19 @@ class _MyAppState extends State<MyApp> {
         sectionEnabled = true;
         break;
       case 2:
+        enabledList[0] = true;
+        enabledList[1] = true;
+        enabledList[2] = true;
+        enabledList[3] = true;
+        enabledList[4] = true;
+        enabledList[5] = true;
+        enabledList[6] = true;
+        enabledList[7] = true;
+        enabledList[8] = true;
+        enabledList[9] = true;
+        enabledList[10] = true;
+        enabledList[11] = true;
         enabledList[12] = true;
-        enabledList[13] = true;
-        enabledList[14] = true;
-        enabledList[15] = true;
-        enabledList[16] = true; 
-        enabledList[17] = true;
         genderEnabled = true;
         sectionEnabled = true;
         break;
@@ -354,17 +407,17 @@ class _MyAppState extends State<MyApp> {
                       DataRow(cells: [
                         DataCell(Text('Modelo 1')),
                         DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre')),
-                        DataCell(Text('60% de precisión')),
+                        DataCell(Text('61.7% de precisión')),
                       ]),
                       DataRow(cells: [
                         DataCell(Text('Modelo 2')),
                         DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre y 2do Bimestre')),
-                        DataCell(Text('67% de precisión')),
+                        DataCell(Text('75% de precisión')),
                       ]),
                       DataRow(cells: [
                         DataCell(Text('Modelo 3')),
                         DataCell(Text('Para la predicción de la nota final de un estudiante, utilza como entradas las notas del 1er Bimestre, 2do Bimestre y 3er Bimestre')),
-                        DataCell(Text('61% de precisión')),
+                        DataCell(Text('70.54% de precisión')),
                       ]),
                       ],
                     ),

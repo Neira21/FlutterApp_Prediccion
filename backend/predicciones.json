@@ -2,11 +2,16 @@
         "model1":{
             "nombre" : "Modelo1.pkl",
             "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
-            "prediccion" : "60%"
+            "prediccion" : "61.70%"
         },
         "model2":{
             "nombre" : "Tema1_2_promed1",
             "descripcion" : "Modelo de prediccion para aprobar el 1er Bimestre del curso de matemáticas",
             "prediccion" : "75%"
+        },
+        "model3":{
+            "nombre" : "model2.pkl",
+            "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
+            "prediccion" : "70.54%"
         }
 }

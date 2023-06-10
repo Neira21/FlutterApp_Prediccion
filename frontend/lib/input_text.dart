@@ -11,6 +11,7 @@ class InputText extends StatelessWidget {
   final bool enabled;
   final FilteringTextInputFormatter inputFormatters;
   final int maxLength;
+  final FocusNode? focusNode;
 
   const InputText({
     Key? key,
@@ -20,7 +21,8 @@ class InputText extends StatelessWidget {
     required this.width,
     required this.enabled,
     required this.inputFormatters,
-    this.maxLength = 2,    
+    this.maxLength = 2,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class InputText extends StatelessWidget {
           SizedBox(
             width: 55,
             child: TextField(
+              focusNode: focusNode,
               enabled: enabled,
               controller: controller,
               style: const TextStyle(

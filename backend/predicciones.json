@@ -1,17 +1,54 @@
 {
-        "model1":{
-            "nombre" : "Modelo1.pkl",
-            "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
-            "prediccion" : "61.70%"
-        },
-        "model2":{
-            "nombre" : "Tema1_2_promed1",
-            "descripcion" : "Modelo de prediccion para aprobar el 1er Bimestre del curso de matemáticas",
-            "prediccion" : "75%"
-        },
-        "model3":{
-            "nombre" : "model2.pkl",
-            "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
-            "prediccion" : "70.54%"
-        }
+    "model1":{
+        "nombre" : "Modelo1.pkl",
+        "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
+        "prediccion" : "61.70%"
+    },
+    "model2":{
+        "nombre" : "Model2.pkl",
+        "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
+        "prediccion" : "74.05%"
+    },
+    "model3":{
+        "nombre" : "Modelo3.pkl",
+        "descripcion" : "Modelo de prediccion para aprobar el curso de matemáticas",
+        "prediccion" : "65.95%"
+    },
+    "model4":{
+        "nombre" : "Modelo4.pkl",
+        "descripcion" : "Modelo de prediccion para predecir el bimestre",
+        "prediccion" : "78.08%"
+    },
+    "model5":{
+        "nombre" : "Modelo5.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "73.86%"
+    },
+    "model6":{
+        "nombre" : "Modelo6.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "76.38%"
+    },
+    "model7":{
+        "nombre" : "Modelo7.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "77.30%"
+    },
+    "model8":{
+        "nombre" : "Modelo8.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "%"
+    },
+    "model9":{
+        "nombre" : "Modelo9.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "%"
+    },
+    "model10":{
+        "nombre" : "Modelo10.pkl",
+        "descripcion" : "Modelo de prediccion para ",
+        "prediccion" : "%"
+    }
 }
+
+
